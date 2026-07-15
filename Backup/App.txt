@@ -1,0 +1,140 @@
+import React from 'react';
+import { View, ActivityIndicator } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator, CardStyleInterpolators } from '@react-navigation/stack';
+import { StatusBar } from 'expo-status-bar';
+import { Provider as PaperProvider } from 'react-native-paper';
+
+// Firebase + Auth Context (added functionality)
+import './config/firebase';
+import { AuthProvider, useAuth } from './context/AuthContext';
+
+// Screens (original + new Digital ID)
+import LoginScreen from './screens/LoginScreen';
+import RegisterScreen from './screens/RegisterScreen';
+import HomeScreen from './screens/HomeScreen';
+import DigitalIDScreen from './screens/DigitalIDScreen'; // new screen for QR & Digital ID
+
+const Stack = createStackNavigator();
+
+/**
+ * Original horizontal slide transition (kept exactly in spirit of your file)
+ */
+const horizontalTransition = ({ current, layouts }) => ({
+  cardStyle: {
+    transform: [
+      {
+        translateX: current.progress.interpolate({
+          inputRange: [0, 1],
+            outputRange: [layouts.screen.width, 0],
+        }),
+      },
+    ],
+  },
+});
+
+/**
+ * Original vertical slide transition used for Register (preserved)
+ */
+const verticalTransition = ({ current, layouts }) => ({
+  cardStyle: {
+    transform: [
+      {
+        translateY: current.progress.interpolate({
+          inputRange: [0, 1],
+          outputRange: [layouts.screen.height, 0],
+        }),
+      },
+    ],
+  },
+});
+
+/**
+ * Auth flow stack (Login + Register) using your original transitions
+ */
+const AuthStack = () => (
+  <Stack.Navigator
+    initialRouteName="Login"
+    screenOptions={{
+      headerShown: false,
+      gestureEnabled: true,
+      cardStyleInterpolator: horizontalTransition,
+    }}
+  >
+    <Stack.Screen name="Login" component={LoginScreen} />
+    <Stack.Screen
+      name="Register"
+      component={RegisterScreen}
+      options={{
+        cardStyleInterpolator: verticalTransition,
+      }}
+    />
+  </Stack.Navigator>
+);
+
+/**
+ * App (authenticated) stack.
+ * Added DigitalID screen while keeping original transition style.
+ */
+const AppStack = () => (
+  <Stack.Navigator
+    initialRouteName="Home"
+    screenOptions={{
+      headerShown: false,
+      gestureEnabled: true,
+      cardStyleInterpolator: horizontalTransition,
+    }}
+  >
+    <Stack.Screen
+      name="Home"
+      component={HomeScreen}
+      options={{ title: 'Home' }}
+    />
+    <Stack.Screen
+      name="DigitalID"
+      component={DigitalIDScreen}
+      options={{
+        // Use a slight modal-style scale/opacity or keep horizontal;
+        // keeping horizontal to remain consistent with your original UX.
+        cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS
+      }}
+    />
+  </Stack.Navigator>
+);
+
+/**
+ * Root selector that waits for auth state (new functionality)
+ */
+const RootNavigator = () => {
+  const { loading, isAuthenticated } = useAuth();
+
+  if (loading) {
+    return (
+      <View style={{ flex: 1, backgroundColor: '#000', justifyContent: 'center', alignItems: 'center' }}>
+        <ActivityIndicator size="large" color="#4ECDC4" />
+      </View>
+    );
+  }
+
+  return isAuthenticated ? <AppStack /> : <AuthStack />;
+};
+
+/**
+ * Final App component:
+ * - Preserves your original StatusBar & transition aesthetics.
+ * - Adds AuthProvider + conditional navigation + PaperProvider (needed for DigitalIDCard).
+ */
+export default function App() {
+  return (
+    <PaperProvider>
+      <AuthProvider>
+        <NavigationContainer>
+          <View style={{ flex: 1 }}>
+            <StatusBar style="light" translucent backgroundColor="transparent" />
+            <RootNavigator />
+          </View>
+        </NavigationContainer>
+      </AuthProvider>
+    </PaperProvider>
+  );
+}

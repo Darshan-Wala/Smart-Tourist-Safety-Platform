@@ -1,0 +1,32 @@
+{
+  "expo": {
+    "name": "Smart Tourist Safety",
+    "slug": "smart-tourist-safety",
+    "version": "1.0.0",
+    "runtimeVersion": { "policy": "appVersion" },
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "newArchEnabled": true,
+    "splash": {
+      "image": "./assets/splash-icon.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "assetBundlePatterns": ["**/*"],
+    "ios": {
+      "bundleIdentifier": "com.yourname.smarttouristsafety",
+      "supportsTablet": true
+    },
+    "android": {
+      "package": "com.yourname.smarttouristsafety",
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#ffffff"
+      }
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    }
+  }
+}

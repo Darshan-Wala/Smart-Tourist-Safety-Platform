@@ -1,0 +1,93 @@
+# Learn more: https://docs.github.com/en/get-started/getting-started-with-git/ignoring-files
+
+# -----------------------
+# Node / package managers
+# -----------------------
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+.pnpm-debug.log*
+*.log
+
+# ---------------
+# Expo / Metro
+# ---------------
+.expo/
+.expo-dev/
+# Keep .expo-shared (asset map) committed if present; useful for asset hashes.
+# .expo-shared/
+.metro-health-check*
+dist/
+web-build/
+expo-env.d.ts
+
+# ---------------
+# Environment
+# ---------------
+.env
+.env.*
+!.env.example
+
+# ---------------
+# OS junk
+# ---------------
+.DS_Store
+Thumbs.db
+*.orig.*
+*.pem
+
+# ---------------
+# IDE / Editors
+# ---------------
+.vscode/
+.idea/
+*.iml
+
+# ---------------
+# Tests / Coverage
+# ---------------
+coverage/
+jest-html-reporters-*.html
+
+# ---------------
+# TypeScript
+# ---------------
+*.tsbuildinfo
+
+# ---------------
+# Native / Android
+# ---------------
+.gradle/
+local.properties
+**/build/
+*.keystore
+*.jks
+# Google/Firebase native config (secrets)
+google-services.json
+
+# ---------------
+# Native / iOS
+# ---------------
+# CocoaPods and iOS build artifacts are inside ios/ which is ignored below
+# Apple signing artifacts (secrets)
+*.p8
+*.p12
+*.key
+*.mobileprovision
+# Google/Firebase native config (secrets)
+GoogleService-Info.plist
+
+# ---------------
+# Expo prebuild native projects
+# ---------------
+# In the managed workflow, these are generated and can be ignored.
+# If you later customize native code, remove these lines and commit android/ and ios/.
+android/
+ios/
+
+# ---------------
+# Misc caches / temp
+# ---------------
+.tmp/
